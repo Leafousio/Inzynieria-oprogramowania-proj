@@ -1,0 +1,65 @@
+
+services:
+  #PostgreSQL
+  db:
+    image: postgres:15
+    container_name: artreview_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: artreview
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  #Backend FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: artreview_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/artreview
+      SECRET_KEY: change_me_to_a_strong_one
+      AZURE_STORAGE_CONNECTION_STRING: ""
+      AZURE_CONTAINER_NAME: artworks
+      MAX_DAILY_UPLOADS: 5
+      MAX_DAILY_REVIEWS: 5
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    #hotreload (untested)
+    volumes:
+      - ./backend/app:/app/app
+    command: >
+      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  #Frontend React (unimplemented)
+  #frontend:
+   # build:
+   #   context: ./frontend
+   #   dockerfile: Dockerfile
+   # container_name: artreview_frontend
+  #  restart: always
+   # ports:
+ #     - "5173:5173"
+  #  environment:
+ #     - VITE_API_BASE=http://localhost:8000
+   # volumes:
+   #   - ./frontend:/app
+   # command: ["npm", "run", "dev"]
+   # depends_on:
+   #   - backend
+
+volumes:
+  pgdata:
