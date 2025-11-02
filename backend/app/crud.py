@@ -64,7 +64,8 @@ def create_review(db: Session, artwork_id: int, author_id: int, content: str):
     return review
 
 
-def get_artwork_for_user(db: Session, user_id: int, category: str = None):
+def get_artwork_for_user( db: Session, user_id: int, category: str):
+    
     query = (
         db.query(
             models.Artwork.id,
@@ -81,7 +82,7 @@ def get_artwork_for_user(db: Session, user_id: int, category: str = None):
     # krotki 
     artwork_counts = query.all()
     if not artwork_counts:
-        return None
+        raise HTTPException(status_code=404, detail="No artworks available")
 
     min_review_count = min(count for _, count in artwork_counts)
     candidate_ids = [

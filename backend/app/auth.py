@@ -9,7 +9,7 @@ from .config import settings
 from . import schemas, models, database
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="users/token")
 
 ALGORITHM = "HS256"
 

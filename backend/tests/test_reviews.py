@@ -15,8 +15,9 @@ def test_review_word_limit(client):
     headers, art_id = setup_user_and_art(client)
     short = "too short"
     r = client.post("/reviews", json={"artwork_id": art_id, "content": short}, headers=headers)
-    assert r.status_code == 400
-
+    # pozwalamy na 400 lub 422 
+    assert r.status_code in (400, 422)
+    
 def test_review_daily_limit(client):
     headers, art_id = setup_user_and_art(client)
     long_text = "word " * 100

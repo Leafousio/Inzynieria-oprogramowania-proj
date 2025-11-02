@@ -1,5 +1,5 @@
 import io
-
+from ..app import schemas
 def create_user_with_artworks(client, email):
     client.post("/users/register", json={"email": email, "password": "123"})
     login = client.post("/users/token", data={"username": email, "password": "123"})
@@ -21,4 +21,19 @@ def test_random_selection(client):
     r = client.get("/artworks/random", headers=headers)
     assert r.status_code == 200
     data = r.json()
-    assert isinstance(data, list)
+    assert isinstance(data, dict)
+
+    assert "id" in data
+    assert "owner_id" in data
+    assert "blob_path" in data
+    assert "title" in data
+    assert "category" in data
+    
+    # Sprawdź typy pól
+    assert isinstance(data["id"], int)
+    assert isinstance(data["owner_id"], int)
+    assert isinstance(data["blob_path"], str)
+    assert isinstance(data["title"], str) 
+    assert isinstance(data["category"], str) 
+    
+    

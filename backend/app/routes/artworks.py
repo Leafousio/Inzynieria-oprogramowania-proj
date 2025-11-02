@@ -23,7 +23,8 @@ def upload_artwork(
     crud.increment_upload(current_user, db)
     return artwork
 
-@router.get("/to-review", response_model=list[schemas.ArtworkOut])
+@router.get("/random", response_model=schemas.ArtworkOut)
 def get_random(category: str = None, db: Session = Depends(database.get_db), current_user = Depends(auth.get_current_user)):
-    arts = crud.get_artwork_for_user(db, current_user.id, category=category, limit=int(settings.MAX_DAILY_REVIEWS))
+    crud.can_review(current_user)
+    arts = crud.get_artwork_for_user(db, current_user.id, category=category )
     return arts

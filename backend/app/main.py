@@ -4,7 +4,7 @@ from .database import engine, Base
 from .routes import users, artworks, reviews
 
 
-# Tworzenie tabel (dla prototypu). W produkcji używaj Alembic.
+# Tworzenie tabel 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="ArtReview Prototype - Backend")
