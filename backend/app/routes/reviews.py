@@ -12,7 +12,7 @@ def count_words(text: str) -> int:
 def post_review(review_in: ReviewCreate, db: Session = Depends(database.get_db), current_user = Depends(auth.get_current_user)):
     if count_words(review_in.content) < 80:
         raise HTTPException(status_code=400, detail="Review must contain at least 80 words")
-    crud.can_review(current_user)
+    crud.can_review(current_user,db)
     artwork_id = review_in.artwork_id
     art = db.query(models.Artwork).filter(models.Artwork.id == artwork_id).first()
     if not art:

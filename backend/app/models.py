@@ -29,10 +29,12 @@ class User(Base):
 class Artwork(Base):
     __tablename__ = "artworks"
     id = Column(Integer, primary_key=True, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String)
+    category = Column(String, nullable=False) # Dodaj tę linię
+    owner_id = Column(Integer, ForeignKey("users.id"))
     blob_path = Column(String, nullable=False)
     title = Column(String, default="")
-    category = Column(String, default="", index=True)
+
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
     owner = relationship("User", back_populates="artworks")
     reviews = relationship("Review", back_populates="artwork")

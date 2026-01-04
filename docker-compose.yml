@@ -33,14 +33,15 @@ services:
       AZURE_CONTAINER_NAME: artworks
       MAX_DAILY_UPLOADS: 5
       MAX_DAILY_REVIEWS: 5
+      BACKEND_URL: http://backend:8000
     ports:
       - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
-    #hotreload (untested)
+  
     volumes:
-      - ./backend/app:/app/app
+      - ./shared_uploads:/shared_uploads
     command: >
       sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 
@@ -52,22 +53,28 @@ services:
       depends_on:
         - db
 
-  #Frontend React (unimplemented)
-  #frontend:
-   # build:
-   #   context: ./frontend
-   #   dockerfile: Dockerfile
-   # container_name: artreview_frontend
-  #  restart: always
-   # ports:
- #     - "5173:5173"
-  #  environment:
- #     - VITE_API_BASE=http://localhost:8000
-   # volumes:
-   #   - ./frontend:/app
-   # command: ["npm", "run", "dev"]
-   # depends_on:
-   #   - backend
+    
+  app:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: my_app
+    volumes:
+      - uploads_volume:/usr/share/nginx/html/uploads
+    environment:
+      - LOCAL_UPLOAD_DIR=/usr/share/nginx/html/uploads
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./shared_uploads:/shared_uploads
+      - ./nginx:/etc/nginx/conf.d
+      - "C:/Users/Gdriv/Desktop/projekt programowanie/Inzynieria-oprogramowania-proj/frontend/dist:/usr/share/nginx/html"
+    depends_on:
+      - backend
 
 volumes:
+  uploads_volume:
   pgdata:

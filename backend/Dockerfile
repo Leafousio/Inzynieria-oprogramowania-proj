@@ -5,8 +5,12 @@ WORKDIR /app
 COPY requirements.txt .
 #zainstaluj wymagane biblioteki
 RUN pip install --no-cache-dir -r requirements.txt
+
+RUN mkdir -p /app/local_uploads
+
 #zkopiuj kod
 COPY ./app ./app 
+
 
 #uruchom testowy serwer
 EXPOSE 8000

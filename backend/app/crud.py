@@ -1,4 +1,5 @@
 # operacje CRUD i optymalizacja liczników dziennych
+import random
 from sqlalchemy import func
 from sqlalchemy.orm import Session  
 from . import models
@@ -8,22 +9,24 @@ from fastapi import HTTPException
 from random import choice
 
 #Licznik reset
-def ensure_daily_reset(user: models.User):
+def reset_daily_limits_if_needed(user, db: Session):
     today = date.today()
+
     if user.last_activity_date != today:
-        user.last_activity_date = today
         user.daily_upload_count = 0
         user.daily_review_count = 0
-
+        user.last_activity_date = today
+        db.commit()
+        db.refresh(user)
 #guard1
-def can_upload(user: models.User):
-    ensure_daily_reset(user)
+def can_upload(user: models.User, db: Session):
+    reset_daily_limits_if_needed(user,db)
     if user.daily_upload_count >= settings.MAX_DAILY_UPLOADS:
         raise HTTPException(status_code=400, detail="Daily upload limit reached") #400 - bad request
     
 #guard2
-def can_review(user: models.User):
-    ensure_daily_reset(user)
+def can_review(user: models.User, db: Session):
+    reset_daily_limits_if_needed(user,db)
     if user.daily_review_count >= settings.MAX_DAILY_REVIEWS:
         raise HTTPException(status_code=400, detail="Daily review limit reached")
     
@@ -63,30 +66,28 @@ def create_review(db: Session, artwork_id: int, author_id: int, content: str):
     db.refresh(review)
     return review
 
-
-def get_artwork_for_user( db: Session, user_id: int, category: str):
-    
-    query = (
-        db.query(
-            models.Artwork.id,
-            func.count(models.Review.id).label("review_count")
+def get_artwork_for_user(db: Session, user_id: int, category: str = None):
+    subquery = (
+        db.query(models.Review.id)
+        .filter(
+            models.Review.artwork_id == models.Artwork.id,
+            models.Review.author_id == user_id,
         )
-        .outerjoin(models.Review, models.Artwork.id == models.Review.artwork_id)
+        .exists()
+    )
+
+    query = (
+        db.query(models.Artwork)
         .filter(models.Artwork.owner_id != user_id)
-        .group_by(models.Artwork.id)
+        .filter(~subquery)   
     )
 
     if category:
         query = query.filter(models.Artwork.category == category)
 
-    # krotki 
-    artwork_counts = query.all()
-    if not artwork_counts:
+    candidates = query.all()
+
+    if not candidates:
         raise HTTPException(status_code=404, detail="No artworks available")
 
-    min_review_count = min(count for _, count in artwork_counts)
-    candidate_ids = [
-        artwork_id for artwork_id, count in artwork_counts if count == min_review_count
-    ]
-    chosen_id = choice(candidate_ids)
-    return db.query(models.Artwork).filter(models.Artwork.id == chosen_id).first()
+    return random.choice(candidates)
