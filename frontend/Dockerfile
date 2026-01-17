@@ -3,6 +3,8 @@ FROM node:18-alpine as build
 
 WORKDIR /app
 
+
+
 # Kopiowanie plików package.json i package-lock.json
 COPY package*.json ./
 

@@ -56,8 +56,8 @@ export default function Overview() {
         setArtwork(null);
         setNoArtworkMessage(
           selectedCategory
-            ? "Brak artworków do recenzji w wybranej kategorii."
-            : "Brak artworków do recenzji."
+            ? "No artworks to review in this category"
+            : "No artworks to review"
         );
       } else {
         console.error("Error fetching random artwork:", error);
@@ -76,7 +76,7 @@ export default function Overview() {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* ===== UPLOAD SECTION ===== */}
+     
         <div className="card p-6">
           <h2 className="text-2xl font-semibold mb-4">
             Upload Artwork

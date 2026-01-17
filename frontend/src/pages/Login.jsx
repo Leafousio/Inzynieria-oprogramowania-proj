@@ -26,7 +26,7 @@ function Login() {
     <div className="min-h-screen-with-nav flex items-center justify-center p-4">
       <div className="form-container w-full">
         <div className="card p-8">
-          <h2 className="text-2xl font-bold text-center mb-6">Zaloguj się</h2>
+          <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
           <form onSubmit={submit} className="flex flex-col gap-4">
             <input 
               className="form-input" 
@@ -35,14 +35,14 @@ function Login() {
             />
             <input 
               className="form-input" 
-              placeholder="Hasło" 
+              placeholder="Password" 
               type="password" 
               onChange={(e) => setPassword(e.target.value)} 
             />
             <button className="btn btn-primary py-3">Login</button>
           </form>
           <div className="mt-6 text-center">
-            <p>Nie masz konta? <Link to="/register" className="text-blue-600 hover:underline">Zarejestruj się</Link></p>
+            <p>No existing account? <Link to="/register" className="text-blue-600 hover:underline">Register here</Link></p>
           </div>
         </div>
       </div>

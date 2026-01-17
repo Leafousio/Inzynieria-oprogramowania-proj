@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { api } from "../api/client";
+import { useEffect } from "react";
 
 function analyzePassword(pass) {
-  const length = pass.length >= 8;
-  const uppercase = /[A-Z]/.test(pass);
-  const digit = /[0-9]/.test(pass);
+  const rules = {
+    length: pass.length >= 8,
+    uppercase: /[A-Z]/.test(pass),
+    digit: /[0-9]/.test(pass),
+  };
 
-  const score = [length, uppercase, digit].filter(Boolean).length;
-
-  return { length, uppercase, digit, score };
+  const score = Object.values(rules).filter(Boolean).length;
+  return { ...rules, score };
 }
 
 export default function Register() {
@@ -29,6 +31,12 @@ export default function Register() {
   ];
 
   const canSubmit = pwd.score === 3 && email.length > 0;
+ 
+  useEffect(() => {
+    if (error && canSubmit) {
+      setError("");
+    }
+  }, [password, email]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +71,7 @@ export default function Register() {
       <div className="form-container w-full">
         <div className="card p-8">
           <h2 className="text-2xl font-bold text-center mb-6">
-            Rejestracja
+            Registration
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -76,36 +84,49 @@ export default function Register() {
               required
             />
 
+           <div className="relative overflow-visible">
             <input
               type="password"
-              placeholder="Hasło"
-              className="form-input"
+              placeholder="Password"
+              className="form-input relative z-10"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
 
-            {/* Pasek siły hasła */}
-            <div className="h-2 w-full bg-gray-200 rounded overflow-hidden">
+           
+            <div className="mt-2 h-2 w-full bg-gray-200 rounded overflow-hidden relative z-0">
               <div
-                className={`h-full transition-all ${
-                  pwd.score > 0 ? strengthColors[pwd.score - 1] : ""
+                style={{
+                  width:
+                    pwd.score === 1 ? "33%" :
+                    pwd.score === 2 ? "66%" :
+                    pwd.score === 3 ? "100%" : "0%",
+                }}
+                className={`h-full transition-all duration-300 ${
+                  pwd.score === 1
+                    ? "bg-red-500"
+                    : pwd.score === 2
+                    ? "bg-yellow-500"
+                    : pwd.score === 3
+                    ? "bg-green-500"
+                    : ""
                 }`}
-                style={{ width: `${(pwd.score / 3) * 100}%` }}
               />
             </div>
+          </div>
 
-            {/* Wymagania */}
-            <ul className="text-sm">
-              <li className={pwd.length ? "text-green-600" : "text-red-600"}>
-                Minimum 8 znaków
-              </li>
-              <li className={pwd.uppercase ? "text-green-600" : "text-red-600"}>
-                Jedna wielka litera
-              </li>
-              <li className={pwd.digit ? "text-green-600" : "text-red-600"}>
-                Jedna cyfra
-              </li>
+            Password Requirements:     
+            <ul className="text-sm space-y-1">
+              {!pwd.length && <li className="text-red-600">At least 8 characters</li>}
+              {!pwd.uppercase && <li className="text-red-600">One uppercase letter</li>}
+              {!pwd.digit && <li className="text-red-600">One number</li>}
+
+              {pwd.score === 3 && (
+                <li className="text-green-600 font-medium">
+                  Password is OK
+                </li>
+              )}
             </ul>
 
             {error && (
@@ -114,20 +135,24 @@ export default function Register() {
               </div>
             )}
 
-            <button
-              className="btn btn-primary py-3"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "Rejestracja..." : "Zarejestruj się"}
-            </button>
+           <button
+            disabled={!canSubmit || loading}
+            className={`
+              btn py-3
+              ${canSubmit && !loading
+                ? "btn-primary"
+                : "bg-gray-400 cursor-not-allowed"}
+            `}
+          >
+            {loading ? "Creating account…" : "Register"}
+          </button>
           </form>
 
           <div className="mt-6 text-center">
             <p>
-              Masz już konto?{" "}
+              Account Exists?{" "}
               <Link to="/login" className="text-blue-600 hover:underline">
-                Zaloguj się
+                Login
               </Link>
             </p>
           </div>

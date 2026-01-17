@@ -13,11 +13,11 @@ export default function MyReviewsPanel({ token }) {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">Twoje recenzje</h2>
+      <h2 className="text-2xl font-semibold mb-6">Your reviews</h2>
 
       {reviews.length === 0 ? (
         <div className="card p-8 text-center">
-          <p className="text-gray-500">Nie masz jeszcze żadnych recenzji.</p>
+          <p className="text-gray-500">You have no reviews</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

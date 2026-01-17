@@ -1,0 +1,17 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.0, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend
+plugins: anyio-4.11.0, hypothesis-6.150.2
+collected 2 items
+
+tests\fuzz\test_fuzz_login.py .                                          [ 50%]
+tests\fuzz\test_fuzz_register.py .                                       [100%]
+
+============================= slowest 5 durations =============================
+0.48s call     tests/fuzz/test_fuzz_login.py::test_login_fuzz
+0.05s setup    tests/fuzz/test_fuzz_login.py::test_login_fuzz
+0.05s call     tests/fuzz/test_fuzz_register.py::test_register_fuzz
+0.02s teardown tests/fuzz/test_fuzz_register.py::test_register_fuzz
+
+(1 durations < 0.005s hidden.  Use -vv to show these durations.)
+============================== 2 passed in 0.81s ==============================

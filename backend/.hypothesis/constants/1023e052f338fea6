@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\config.py
+# hypothesis_version: 6.150.2
+
+['.env', 'Daily review limit', 'Daily upload limit', 'Secret key for JWT', 'artworks', 'sqlite:///./test.db', 'test_secret_key', 'utf-8']

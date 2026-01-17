@@ -5,8 +5,7 @@ from .. import database, auth, crud, schemas
 from ..config import settings
 from .. import models
 from ..utils.azure_blob import upload_file_to_blob
-
-
+from sqlalchemy.sql import func
 router = APIRouter(prefix="/artworks", tags=["artworks"])
 
 
@@ -47,13 +46,17 @@ def get_random(
         
     return artwork
 
-@router.get("/public-random", response_model=schemas.ArtworkOut)
-def get_public_random_artwork(
-    db: Session = Depends(database.get_db),
+@router.get("/public-random", response_model=list[schemas.ArtworkOut])
+def get_public_random_artworks( limit: int = 3, db: Session = Depends(database.get_db),
 ):
-    artworks = db.query(models.Artwork).all()
+    artworks = (
+        db.query(models.Artwork)
+        .order_by(func.random())
+        .limit(limit)
+        .all()
+    )
 
     if not artworks:
         raise HTTPException(status_code=404, detail="No artworks available")
 
-    return random.choice(artworks)
+    return artworks

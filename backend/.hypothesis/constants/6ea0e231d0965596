@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\database.py
+# hypothesis_version: 6.150.2
+
+[3600, 'max_overflow', 'pool_recycle', 'pool_size', 'pool_timeout', 'sqlite']

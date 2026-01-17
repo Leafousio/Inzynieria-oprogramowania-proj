@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\schemas.py
+# hypothesis_version: 6.150.2
+
+['[0-9]', '[A-Z]', 'bearer', 'ceramics', 'crafts', 'digital painting', 'jedna cyfra', 'jedna wielka litera', 'minimum 8 znaków', 'password', 'photography', 'sculpture', 'traditional painting']

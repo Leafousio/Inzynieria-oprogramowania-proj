@@ -1,0 +1,13 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.0, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend
+plugins: anyio-4.11.0, hypothesis-6.150.2
+collected 1 item
+
+tests\performance\test_performance_auth.py .                             [100%]
+
+============================ slowest 10 durations =============================
+0.55s call     tests/performance/test_performance_auth.py::test_register_performance
+0.06s setup    tests/performance/test_performance_auth.py::test_register_performance
+0.01s teardown tests/performance/test_performance_auth.py::test_register_performance
+============================== 1 passed in 0.86s ==============================

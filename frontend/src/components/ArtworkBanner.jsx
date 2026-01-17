@@ -14,9 +14,12 @@ function handleClick() {
 }
   return (
     <section className="art-marquee">
-      <div className="art-marquee__track">
-        {[...artworks, ...artworks].map((artwork, idx) => (
-          <div className="art-marquee__item group">
+        <div className="art-marquee__track">
+      {[...artworks, ...artworks].map((artwork, idx) => (
+        <div
+          key={`${artwork.id}-${idx}`}
+          className="art-marquee__item group"
+        >
           {artwork.blob_path && (
             <>
               <img
@@ -25,23 +28,12 @@ function handleClick() {
                 draggable={false}
               />
 
-              {/* overlay */}
-              <div
-                onClick={() => handleClick()}
-                className="absolute inset-0 bg-black/30 opacity-0 
-                          group-hover:opacity-100 transition-opacity
-                          flex items-center justify-center
-                          cursor-pointer"
-              >
-                <span className="text-white text-sm tracking-wide border border-white px-4 py-2">
-                  Review this artwork
-                </span>
-              </div>
+              
             </>
           )}
         </div>
-        ))}
-      </div>
+      ))}
+    </div>
     </section>
   );
 }

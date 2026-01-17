@@ -6,24 +6,26 @@ export default function Home() {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const requests = [0, 1, 2].map(() =>
-          fetch("/api/artworks/public-random").then((r) => r.json())
-        );
+ useEffect(() => {
+  async function load() {
+    try {
+      const res = await fetch("/api/artworks/public-random?limit=3");
 
-        const results = await Promise.all(requests);
-        setArtworks(results);
-      } catch (err) {
-        console.error("Failed to load homepage artworks", err);
-      } finally {
-        setLoading(false);
+      if (!res.ok) {
+        throw new Error("Failed to fetch artworks");
       }
-    }
 
-    load();
-  }, []);
+      const data = await res.json();
+      setArtworks(data);
+    } catch (err) {
+      console.error("Failed to load homepage artworks", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  load();
+}, []);
 
   if (loading) {
     return <div className="py-20 text-center">Loading gallery…</div>;

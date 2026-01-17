@@ -1,52 +1,46 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
   return (
-    <div className="container mx-auto p-4 md:p-6">
-      {/* Sub-navbar */}
-      <div className="flex flex-wrap gap-2 mb-8">
-        <NavLink
-          end
-          to="/dashboard"
-          className={({ isActive }) =>
-            `px-4 py-2 rounded transition-colors ${
-              isActive 
-                ? "bg-blue-600 text-white" 
-                : "bg-gray-200 hover:bg-gray-300"
-            }`
-          }
-        >
-          Overview
-        </NavLink>
+    <div className="max-w-page mx-auto px-8 py-10">
+   
+      <div className="flex gap-12 border-b border-border mb-12 text-sm uppercase tracking-wide">
+        {[
+          { to: "/dashboard", label: "Overview", end: true },
+          { to: "/dashboard/artworks", label: "My Artworks" },
+          { to: "/dashboard/reviews", label: "My Reviews" },
+        ].map(({ to, label, end }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={end}
+            className="relative pb-3"
+          >
+            {({ isActive }) => (
+              <>
+                <span
+                  className={`transition-colors ${
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </span>
 
-        <NavLink
-          to="/dashboard/artworks"
-          className={({ isActive }) =>
-            `px-4 py-2 rounded transition-colors ${
-              isActive 
-                ? "bg-blue-600 text-white" 
-                : "bg-gray-200 hover:bg-gray-300"
-            }`
-          }
-        >
-          My Artworks
-        </NavLink>
-
-        <NavLink
-          to="/dashboard/reviews"
-          className={({ isActive }) =>
-            `px-4 py-2 rounded transition-colors ${
-              isActive 
-                ? "bg-blue-600 text-white" 
-                : "bg-gray-200 hover:bg-gray-300"
-            }`
-          }
-        >
-          My Reviews
-        </NavLink>
+                {isActive && (
+                  <motion.span
+                    layoutId="dashboard-underline"
+                    className="absolute left-0 right-0 -bottom-px h-px bg-foreground"
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+        ))}
       </div>
 
-      {/* Page content rendered here */}
       <Outlet />
     </div>
   );

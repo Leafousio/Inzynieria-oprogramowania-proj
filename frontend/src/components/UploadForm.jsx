@@ -13,7 +13,7 @@ const UploadForm = ({ onUploadSuccess }) => {
   const { categories } = useCategories(); 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) return alert("Wybierz plik!");
+    if (!file) return alert("Choose a file!");
 
     const formData = new FormData();
     formData.append("file", file);
@@ -25,7 +25,7 @@ const UploadForm = ({ onUploadSuccess }) => {
       onUploadSuccess();
       setTitle("");
     } catch (err) {
-      alert("Błąd uploadu");
+      alert("Upload error");
     }
   };
 
@@ -33,7 +33,7 @@ const UploadForm = ({ onUploadSuccess }) => {
     <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-gray-50 rounded">
       <input 
         className="w-full p-2 border" 
-        placeholder="Tytuł" 
+        placeholder="Title" 
         value={title} 
         onChange={e => setTitle(e.target.value)} 
       />
@@ -43,7 +43,7 @@ const UploadForm = ({ onUploadSuccess }) => {
           className="border p-2 rounded w-full"
           required
         >
-          <option value="">Wybierz kategorię</option>
+          <option value="">Choose category</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
               {cat}
@@ -51,7 +51,7 @@ const UploadForm = ({ onUploadSuccess }) => {
           ))}
         </select>
       <input type="file" onChange={e => setFile(e.target.files[0])} />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Wyślij</button>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full">Upload</button>
     </form>
   );
 };

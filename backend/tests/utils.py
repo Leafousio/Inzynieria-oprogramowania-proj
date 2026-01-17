@@ -1,0 +1,1 @@
+VALID_PASSWORD = "ValidPass1"

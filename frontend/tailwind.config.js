@@ -1,12 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,jsx}'],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
-    extend: {
-      fontFamily: {
-        custom: ['"arcane-fable"', 'sans-serif'],
-      },
-    },
+  
     extend: {
       colors: {
         background: '#fafafa',
@@ -28,6 +24,10 @@ export default {
   "bg-red-500",
   "bg-yellow-500",
   "bg-green-500",
+  "w-0",
+  "w-1/3",
+  "w-2/3",
+  "w-full",
 ],
   plugins: [],
 }

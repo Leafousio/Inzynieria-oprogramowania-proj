@@ -1,42 +1,48 @@
-# backend/tests/conftest_local.py
-
 import pytest
-from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.pool import StaticPool
-from backend.app.database import Base, get_db
+from fastapi.testclient import TestClient
+
 from backend.app.main import app
+from backend.app.database import Base, get_db
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+
+TEST_DATABASE_URL = "sqlite:///./test.db"
+
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False},
-    poolclass=StaticPool,
+    TEST_DATABASE_URL, connect_args={"check_same_thread": False}
 )
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-@pytest.fixture(scope="session")
-def db():
-    """Tworzy testową bazę danych w pamięci"""
+TestingSessionLocal = sessionmaker(
+    autocommit=False, autoflush=False, bind=engine
+)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_database():
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
-    session = TestingSessionLocal()
-    yield session
-    session.close()
+    yield
     Base.metadata.drop_all(bind=engine)
 
-@pytest.fixture(scope="session")
-def client(db):
-    """Zwraca klienta FastAPI z nadpisaną bazą danych"""
-    def override_get_db_dependency():
+
+@pytest.fixture
+def db_session():
+    session = TestingSessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()
+
+
+@pytest.fixture
+def client(db_session):
+    def override_get_db():
         try:
-            yield db
+            yield db_session
         finally:
             pass
 
-    app.dependency_overrides[get_db] = override_get_db_dependency
-
-    with TestClient(app) as c:
-        yield c
-
+    app.dependency_overrides[get_db] = override_get_db
+    yield TestClient(app)
     app.dependency_overrides.clear()

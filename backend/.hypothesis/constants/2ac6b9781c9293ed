@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\models.py
+# hypothesis_version: 6.150.2
+
+['Artwork', 'Review', 'User', 'artwork', 'artworks', 'artworks.id', 'author', 'owner', 'reviews', 'users', 'users.id']

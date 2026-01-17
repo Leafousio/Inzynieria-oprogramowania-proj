@@ -10,7 +10,8 @@ if not os.path.exists(LOCAL_UPLOAD_DIR):
     os.makedirs(LOCAL_UPLOAD_DIR)
 
 
-Base.metadata.create_all(bind=engine)
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="ArtReview Prototype - Backend")
 

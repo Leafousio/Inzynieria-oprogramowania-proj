@@ -13,11 +13,11 @@ export default function MyArtworksPanel({ token }) {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">Twoje Artworki</h2>
+      <h2 className="text-2xl font-semibold mb-6">Your Artworks</h2>
 
       {artworks.length === 0 ? (
         <div className="card p-8 text-center">
-          <p className="text-gray-500">Nie masz jeszcze żadnych artworków.</p>
+          <p className="text-gray-500">No Artworks yet</p>
         </div>
       ) : (
         <div className="responsive-grid">
@@ -32,23 +32,22 @@ export default function MyArtworksPanel({ token }) {
               </div>
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-2">{a.title}</h3>
-                <p className="text-gray-600 mb-2">Kategoria: {a.category}</p>
+                <p className="text-gray-600 mb-2">Category: {a.category}</p>
                 <button
                 className="text-sm text-blue-600 underline"
                 onClick={() =>
                   setExpanded(expanded === a.id ? null : a.id)
                 }
                >
-                Recenzje: {a.reviews?.length ?? 0}
+                Reviews: {a.reviews?.length ?? 0}
               </button>
               {expanded === a.id && a.reviews?.length > 0 && (
                 <div className="mt-3 space-y-2 text-sm">
                   {a.reviews.map((r) => (
                     <div key={r.id} className="bg-gray-100 p-2 rounded">
                       <p>{r.content}</p>
-                      <p className="text-xs text-gray-500">
-                        Autor ID: {r.author_id}
-                      </p>
+                       
+                       
                     </div>
                   ))}
                 </div>

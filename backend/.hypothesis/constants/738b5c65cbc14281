@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\utils\azure_blob.py
+# hypothesis_version: 6.150.2
+
+['/shared_uploads', 'wb']

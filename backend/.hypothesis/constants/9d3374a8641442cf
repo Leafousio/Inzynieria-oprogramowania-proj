@@ -1,0 +1,4 @@
+# file: C:\Users\Gdriv\Desktop\projekt programowanie\Inzynieria-oprogramowania-proj\backend\app\auth.py
+# hypothesis_version: 6.150.2
+
+['Bearer', 'HS256', 'WWW-Authenticate', 'auto', 'bcrypt', 'exp', 'iat', 'user_id', 'users/token']
